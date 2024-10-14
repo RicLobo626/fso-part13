@@ -12,6 +12,12 @@ const createBlog = async (req, res) => {
   res.status(201).json(blog);
 };
 
+const likeBlog = async (req, res) => {
+  const blog = await service.likeBlog(req.blog, req.body);
+
+  res.json(blog);
+};
+
 const deleteBlog = async (req, res) => {
   await service.destroyBlog(req.blog);
 
@@ -22,4 +28,5 @@ module.exports = {
   getBlogs,
   createBlog,
   deleteBlog,
+  likeBlog,
 };
