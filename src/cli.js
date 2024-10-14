@@ -1,7 +1,8 @@
 require("dotenv").config();
 const { Sequelize, QueryTypes } = require("sequelize");
+const config = require("./utils/config");
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+const sequelize = new Sequelize(config.DATABASE_URL);
 
 const printBlogs = async () => {
   const blogs = await sequelize.query("SELECT * FROM blogs", { type: QueryTypes.SELECT });
