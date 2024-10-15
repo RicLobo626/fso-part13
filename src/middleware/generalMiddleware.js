@@ -10,13 +10,13 @@ const unknownEndpoint = (req, res) => {
 
 const errorHandler = (error, req, res, next) => {
   switch (error.name) {
-    case "NotFoundError":
-      return res.status(404).json({ error: error.message });
     case "ValidationError":
-    case "SequelizeValidationError":
-      return res.status(400).json({ error: error.message });
     case "SequelizeDatabaseError":
       return res.status(400).json({ error: error.message });
+    case "SequelizeValidationError":
+      return res.status(400).json({ error: error.errors.map((e) => e.message) });
+    case "NotFoundError":
+      return res.status(404).json({ error: error.message });
 
     default:
       next(error);
