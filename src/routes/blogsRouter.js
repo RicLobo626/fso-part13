@@ -5,8 +5,11 @@ const generalMiddleware = require("../middleware/generalMiddleware");
 const router = Router();
 
 router.get("/", controller.getBlogs);
-router.post("/", generalMiddleware.tokenExtractor, generalMiddleware.userExtractor, controller.createBlog);
-router.delete("/:id", middleware.blogFinder, controller.deleteBlog);
 router.put("/:id", middleware.blogFinder, controller.likeBlog);
+
+router.use(generalMiddleware.tokenExtractor, generalMiddleware.userExtractor);
+
+router.post("/", controller.createBlog);
+router.delete("/:id", middleware.blogFinder, controller.deleteBlog);
 
 module.exports = router;

@@ -20,7 +20,7 @@ const likeBlog = async (req, res) => {
 };
 
 const deleteBlog = async (req, res) => {
-  await service.destroyBlog(req.blog);
+  await service.destroyBlog(req.blog, req.user);
 
   res.status(204).end();
 };
