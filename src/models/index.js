@@ -7,4 +7,4 @@ Blog.belongsTo(User);
 User.sync({ alter: true });
 Blog.sync({ alter: true });
 
-module.exports = { Blog };
+module.exports = { Blog, User };
