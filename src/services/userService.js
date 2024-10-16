@@ -1,8 +1,8 @@
 const { ValidationError, NotFoundError } = require("../utils/customErrors");
-const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const { Blog, User } = require("../models");
 
-const findUsers = () => User.findAll();
+const findUsers = () => User.findAll({ include: { model: Blog, attributes: { exclude: ["userId"] } } });
 
 const findUser = (username, scope = "defaultScope") => {
   return User.scope(scope).findOne({ where: { username } });
