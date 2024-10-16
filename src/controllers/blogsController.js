@@ -7,7 +7,8 @@ const getBlogs = async (_req, res) => {
 };
 
 const createBlog = async (req, res) => {
-  const blog = await service.createBlog(req.body);
+  const userId = req.user.id;
+  const blog = await service.createBlog({ ...req.body, userId });
 
   res.status(201).json(blog);
 };
