@@ -20,6 +20,8 @@ const errorHandler = (error, req, res, next) => {
       return res.status(400).json({ error: error.errors.map((e) => e.message) });
     case "NotFoundError":
       return res.status(404).json({ error: error.message });
+    case "UnauthorizedError":
+      return res.status(401).json({ error: error.message });
     default:
       next(error);
   }
