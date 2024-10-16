@@ -1,4 +1,7 @@
 const morgan = require("morgan");
+const { SECRET } = require("../utils/config");
+const jwt = require("jsonwebtoken");
+const userService = require("../services/userService");
 
 morgan.token("body", (req) => JSON.stringify(req.body));
 
@@ -17,10 +20,32 @@ const errorHandler = (error, req, res, next) => {
       return res.status(400).json({ error: error.errors.map((e) => e.message) });
     case "NotFoundError":
       return res.status(404).json({ error: error.message });
-
     default:
       next(error);
   }
 };
 
-module.exports = { unknownEndpoint, errorHandler, requestLogger };
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get("authorization");
+
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    req.token = authorization.slice(7);
+  } else {
+    return res.status(401).json({ error: "Token missing" });
+  }
+
+  next();
+};
+
+const userExtractor = async (req, res, next) => {
+  try {
+    const { username } = jwt.verify(req.token, SECRET);
+    req.user = await userService.findUser(username);
+  } catch (e) {
+    return res.status(401).json({ error: "Token invalid" });
+  }
+
+  next();
+};
+
+module.exports = { unknownEndpoint, errorHandler, requestLogger, tokenExtractor, userExtractor };
