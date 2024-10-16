@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 
 const findUsers = () => User.findAll();
 
+const findUser = (username, scope = "defaultScope") => {
+  return User.scope(scope).findOne({ where: { username } });
+};
+
 const createUser = async (body) => {
   const { password, ...rest } = body;
 
@@ -33,6 +37,7 @@ const updateUser = async (username, body) => {
 
 module.exports = {
   findUsers,
+  findUser,
   createUser,
   updateUser,
 };
