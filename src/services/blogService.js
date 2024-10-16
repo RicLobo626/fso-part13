@@ -1,9 +1,17 @@
+const User = require("../models/User");
 const { Blog } = require("../models");
 const { UnauthorizedError } = require("../utils/customErrors");
 
 const findBlog = (id) => Blog.findByPk(id);
 
-const findBlogs = () => Blog.findAll();
+const findBlogs = () =>
+  Blog.findAll({
+    attributes: { exclude: ["userId"] },
+    include: {
+      model: User,
+      attributes: ["id", "name"],
+    },
+  });
 
 const createBlog = (body) => Blog.create(body);
 
