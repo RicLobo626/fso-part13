@@ -1,7 +1,7 @@
 const service = require("../services/blogService");
 
-const getBlogs = async (_req, res) => {
-  const blogs = await service.findBlogs();
+const getBlogs = async (req, res) => {
+  const blogs = await service.findBlogs(req.query);
 
   res.json(blogs);
 };
