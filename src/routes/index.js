@@ -1,5 +1,6 @@
-const blogsRouter = require("./blogsRouter");
-const usersRouter = require("./usersRouter");
-const loginRouter = require("./loginRouter");
+const blogs = require("./blogsRouter");
+const users = require("./usersRouter");
+const login = require("./loginRouter");
+const authors = require("./authorsRouter");
 
-module.exports = { blogsRouter, usersRouter, loginRouter };
+module.exports = { blogs, users, authors, login };

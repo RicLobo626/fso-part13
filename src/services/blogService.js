@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { Blog } = require("../models");
 const { UnauthorizedError } = require("../utils/customErrors");
 const { Op } = require("sequelize");
+const { sequelize } = require("../utils/db");
 
 const findBlog = (id) => Blog.findByPk(id);
 
@@ -41,4 +42,16 @@ const destroyBlog = async (blog, user) => {
   await blog.destroy();
 };
 
-module.exports = { findBlog, findBlogs, createBlog, likeBlog, destroyBlog };
+const findAuthorStats = async () => {
+  return Blog.findAll({
+    attributes: [
+      "author",
+      [sequelize.fn("COUNT", sequelize.col("author")), "articles"],
+      [sequelize.fn("SUM", sequelize.col("likes")), "likes"],
+    ],
+    order: [["likes", "DESC"]],
+    group: "author",
+  });
+};
+
+module.exports = { findBlog, findBlogs, createBlog, likeBlog, destroyBlog, findAuthorStats };
