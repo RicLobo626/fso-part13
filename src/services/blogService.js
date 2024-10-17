@@ -19,7 +19,7 @@ const findBlogs = ({ search }) => {
       model: User,
       attributes: ["id", "name"],
     },
-    where,
+    order: [["likes", "DESC"]],
   });
 };
 
