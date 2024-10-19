@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { PORT = 3001, DATABASE_URL, SECRET } = process.env;
 
 module.exports = {

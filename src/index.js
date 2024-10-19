@@ -1,10 +1,9 @@
-require("dotenv").config();
 const { PORT } = require("./utils/config");
-const { connectToDb } = require("./utils/db");
+const { runMigrations } = require("./utils/db");
 const app = require("./app");
 
 const start = async () => {
-  await connectToDb();
+  await runMigrations();
   app.listen(PORT, async () => console.log(`Server is running. http://localhost:${PORT}`));
 };
 
