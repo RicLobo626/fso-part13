@@ -6,6 +6,13 @@ const createUser = async (req, res) => {
   res.status(201).json(user);
 };
 
+const getUser = async (req, res) => {
+  const id = req.params.id;
+  const user = await service.findUserById(id);
+
+  res.json(user);
+};
+
 const getUsers = async (_req, res) => {
   const users = await service.findUsers();
 
@@ -24,5 +31,6 @@ const updateUsername = async (req, res) => {
 module.exports = {
   createUser,
   getUsers,
+  getUser,
   updateUsername,
 };

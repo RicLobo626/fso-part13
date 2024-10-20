@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", controller.getUsers);
 router.post("/", controller.createUser);
+router.get("/:id", controller.getUser);
 router.put("/:username", controller.updateUsername);
 
 module.exports = router;
