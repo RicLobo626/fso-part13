@@ -11,6 +11,7 @@ app.use("/api/login", routes.login);
 app.use("/api/blogs", routes.blogs);
 app.use("/api/users", routes.users);
 app.use("/api/authors", routes.authors);
+app.use("/api/readinglists", routes.readinglists);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
