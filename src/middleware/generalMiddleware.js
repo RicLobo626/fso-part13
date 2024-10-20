@@ -43,8 +43,8 @@ const tokenExtractor = (req, res, next) => {
 
 const userExtractor = async (req, res, next) => {
   try {
-    const { username } = jwt.verify(req.token, SECRET);
-    req.user = await userService.findUser(username);
+    const { id } = jwt.verify(req.token, SECRET);
+    req.user = await userService.findUserById(id);
   } catch (e) {
     return res.status(401).json({ error: "Token invalid" });
   }

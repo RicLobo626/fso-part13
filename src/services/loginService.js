@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const authenticate = async (username, password) => {
-  const user = await userService.findUser(username, "sensitive");
+  const user = await userService.findUserByUsername(username, "sensitive");
 
   if (!user) {
     throw new NotFoundError("Invalid username");

@@ -4,9 +4,12 @@ const { Blog, User } = require("../models");
 
 const findUsers = () => User.findAll({ include: { model: Blog, attributes: { exclude: ["userId"] } } });
 
-const findUser = (username, scope = "defaultScope") => {
-  return User.scope(scope).findOne({
-    where: { username },
+const findUserByUsername = (username, scope = "defaultScope") => {
+  return User.scope(scope).findOne({ where: { username } });
+};
+
+const findUserById = (id, scope = "defaultScope") => {
+  return User.scope(scope).findByPk(id, {
     include: [
       {
         model: Blog,
@@ -51,7 +54,8 @@ const updateUser = async (username, body) => {
 
 module.exports = {
   findUsers,
-  findUser,
+  findUserById,
+  findUserByUsername,
   createUser,
   updateUser,
 };
