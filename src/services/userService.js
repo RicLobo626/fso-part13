@@ -5,7 +5,21 @@ const { Blog, User } = require("../models");
 const findUsers = () => User.findAll({ include: { model: Blog, attributes: { exclude: ["userId"] } } });
 
 const findUser = (username, scope = "defaultScope") => {
-  return User.scope(scope).findOne({ where: { username } });
+  return User.scope(scope).findOne({
+    where: { username },
+    include: [
+      {
+        model: Blog,
+        attributes: { exclude: ["userId", "createdAt", "updatedAt"] },
+      },
+      {
+        model: Blog,
+        as: "readings",
+        attributes: { exclude: ["userId", "createdAt", "updatedAt"] },
+        through: { attributes: [] },
+      },
+    ],
+  });
 };
 
 const createUser = async (body) => {
