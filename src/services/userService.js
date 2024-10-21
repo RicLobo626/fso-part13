@@ -19,7 +19,7 @@ const findUserById = (id, scope = "defaultScope") => {
         model: Blog,
         as: "readings",
         attributes: { exclude: ["userId", "createdAt", "updatedAt"] },
-        through: { attributes: [] },
+        through: { as: "status", attributes: ["read", "id"] },
       },
     ],
   });
