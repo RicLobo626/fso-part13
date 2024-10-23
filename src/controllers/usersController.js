@@ -8,7 +8,7 @@ const createUser = async (req, res) => {
 
 const getUser = async (req, res) => {
   const id = req.params.id;
-  const user = await service.findUserById(id);
+  const user = await service.findUserById(id, req.query);
 
   res.json(user);
 };

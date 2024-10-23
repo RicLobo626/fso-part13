@@ -1,6 +1,7 @@
 const { ValidationError, NotFoundError } = require("../utils/customErrors");
 const bcrypt = require("bcrypt");
 const { Blog, User } = require("../models");
+const { Op } = require("sequelize");
 
 const findUsers = () => User.findAll({ include: { model: Blog, attributes: { exclude: ["userId"] } } });
 
@@ -8,7 +9,13 @@ const findUserByUsername = (username, scope = "defaultScope") => {
   return User.scope(scope).findOne({ where: { username } });
 };
 
-const findUserById = (id, scope = "defaultScope") => {
+const findUserById = (id, query = {}, scope = "defaultScope") => {
+  const statusWhere = {};
+
+  if (query.read) {
+    statusWhere.read = { [Op.eq]: query.read === "true" };
+  }
+
   return User.scope(scope).findByPk(id, {
     include: [
       {
@@ -19,7 +26,11 @@ const findUserById = (id, scope = "defaultScope") => {
         model: Blog,
         as: "readings",
         attributes: { exclude: ["userId", "createdAt", "updatedAt"] },
-        through: { as: "status", attributes: ["read", "id"] },
+        through: {
+          as: "status",
+          attributes: ["read", "id"],
+          where: statusWhere,
+        },
       },
     ],
   });
