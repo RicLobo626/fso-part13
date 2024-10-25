@@ -2,6 +2,8 @@ const morgan = require("morgan");
 const { SECRET } = require("../utils/config");
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
+const { UnauthorizedError } = require("../utils/customErrors");
+const { Session } = require("../models");
 
 morgan.token("body", (req) => JSON.stringify(req.body));
 
@@ -35,18 +37,29 @@ const tokenExtractor = (req, res, next) => {
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     req.token = authorization.slice(7);
   } else {
-    return res.status(401).json({ error: "Token missing" });
+    throw new UnauthorizedError("Token missing");
   }
 
   next();
 };
 
-const userExtractor = async (req, res, next) => {
+const userExtractor = async (req, _res, next) => {
+  const session = await Session.findOne({ where: { token: req.token } });
+
+  if (!session) {
+    throw new UnauthorizedError("Expired token");
+  }
+
   try {
     const { id } = jwt.verify(req.token, SECRET);
     req.user = await userService.findUserById(id);
-  } catch (e) {
-    return res.status(401).json({ error: "Token invalid" });
+  } catch {
+    throw new UnauthorizedError("Token invalid");
+  }
+
+  if (req.user.disabled) {
+    await session.destroy();
+    throw new UnauthorizedError("User is disabled");
   }
 
   next();

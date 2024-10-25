@@ -3,12 +3,17 @@ const { NotFoundError, ValidationError } = require("../utils/customErrors");
 const userService = require("./userService");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { Session } = require("../models");
 
 const authenticate = async (username, password) => {
   const user = await userService.findUserByUsername(username, "sensitive");
 
   if (!user) {
     throw new NotFoundError("Invalid username");
+  }
+
+  if (user.disabled) {
+    throw new ValidationError("User is disabled");
   }
 
   if (!password) {
@@ -27,6 +32,8 @@ const authenticate = async (username, password) => {
   };
 
   const token = jwt.sign(tokenPayload, SECRET);
+
+  await Session.create({ userId: user.id, token });
 
   return { token, username, name: user.name };
 };

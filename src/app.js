@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(middleware.requestLogger);
 app.use("/api/login", routes.login);
+app.use("/api/logout", routes.logout);
 app.use("/api/blogs", routes.blogs);
 app.use("/api/users", routes.users);
 app.use("/api/authors", routes.authors);
